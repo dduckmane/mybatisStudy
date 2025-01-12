@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board">
+    <!--<insert id="save" parameterType="com.example.mybatisstudy.dto.BoardDTO">  /*alias가 없다면 전체 경로를 다 적어야 한다.*/-->
+    <!--    <insert id="save" parameterType="board" useGeneratedKeys="true" keyProperty="id">
+            insert into board_table(boardTitle, boardWriter, boardPass, boardContents)
+            values(#{boardTitle}, #{boardWriter}, #{boardPass}, #{boardContents})
+        </insert>-->
+    <insert id="save" parameterType="board" useGeneratedKeys="false"> /*오라클은 useGeneratedKeys="false 여야한다.*/
+    insert into board_table(boardTitle, boardWriter, boardPass, boardContents)
+    values (#{boardTitle}, #{boardWriter}, #{boardPass}, #{boardContents})
+    </insert>
+
+    <select id="findAll" resultType="board">
+        select id
+             , boardtitle
+             , boardwriter
+             , boardpass
+             , boardcontents
+             , boardhits
+             , to_char(createdat, 'yyyy-mm-dd') createdat
+             , fileattached
+        from board_table
+        order by id desc
+    </select>
+
+    <update id="updateHits" parameterType="Long">
+        update BOARD_TABLE
+        set BOARDHITS = BOARDHITS + 1
+        where ID = #{id}
+    </update>
+
+    <select id="findById" parameterType="Long" resultType="board">
+        select id
+             , boardtitle
+             , boardwriter
+             , boardpass
+             , boardcontents
+             , boardhits
+             , to_char(createdat, 'yyyy-mm-dd') createdat
+             , fileattached
+        from BOARD_TABLE
+        where ID = #{id}
+    </select>
+</mapper>
